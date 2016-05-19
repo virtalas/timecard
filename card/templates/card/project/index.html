@@ -1,0 +1,31 @@
+{% extends 'card/base.html' %}
+
+{% block content %}
+
+  <h3>New project</h3>
+
+  <form action="{% url 'card:new_project' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="name" value="">
+    <input type="submit" value="Create project" />
+  </form>
+
+  <h3>Active projects:</h3>
+
+  <ul>
+    {% for project in projects %}
+      <li><a href="{% url 'card:view_project' project.id %}">{{project.name}}</a></li>
+    {% endfor %}
+  </ul>
+
+  {% if completed_projects %}
+    <h3>Completed projects:</h3>
+  {% endif %}
+
+  <ul>
+    {% for project in completed_projects %}
+      <li><a href="{% url 'card:view_project' project.id %}">{{project.name}}</a></li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}
