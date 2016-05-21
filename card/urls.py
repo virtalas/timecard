@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^(?P<project_id>[0-9]+)/project/complete$', views.project.complete, name='complete_project'),
 
     url(r'^(?P<project_id>[0-9]+)/work/new/$', views.work.create, name='new_work'),
+    url(r'^(?P<work_id>[0-9]+)/work/done/$', views.work.done, name='work_done'),
 ]

@@ -2,6 +2,8 @@
 
 {% block content %}
 
+
+
   <h3>Hours left today:</h3>
 
   <span id="hours">1</span> h
@@ -18,7 +20,10 @@
     <b>Project</b><br>
     {{current_work.project.name}}<br><br>
 
-    <button type="button" name="button">Stop timer</button>
+    <form action="{% url 'card:work_done' current_work.id %}" method="post">
+      {% csrf_token %}
+      <input type="submit" value="Stop timer" />
+    </form>
   {% else %}
     <!-- No current work, display interface for starting a timer/work -->
     <h4>Start a timer for project:</h4>

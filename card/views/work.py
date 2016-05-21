@@ -13,3 +13,9 @@ def create(request, project_id):
     # user = 2 until login implemented
     project.work_set.create(user_id=2, start_time=timezone.now())
     return HttpResponseRedirect(reverse('card:index'))
+
+def done(request, work_id):
+    work = get_object_or_404(Work, pk=work_id)
+    work.end_time = timezone.now()
+    work.save()
+    return HttpResponseRedirect(reverse('card:index'))
