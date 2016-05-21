@@ -2,10 +2,31 @@
 
 {% block content %}
 
-  <h3>Start timer for project</h3>
+  <h3>Hours left today:</h3>
 
-  <ul>
+  <span id="hours">1</span> h
+  <span id="minutes">1</span> min
+  <span id="seconds">1</span> sec
 
-  </ul>
+  {% if current_work %}
+    <!-- Current work information -->
+    <h3>Current timer</h3>
+
+    <b>Start time</b><br>
+    {{current_work.start_time|date:"H:i j.m.Y"}}<br><br>
+
+    <b>Project</b><br>
+    {{current_work.project.name}}<br><br>
+
+    <button type="button" name="button">Stop timer</button>
+  {% else %}
+    <!-- No current work, display interface for starting a timer/work -->
+    <h4>Start a timer for project:</h4>
+    <ul>
+      {% for project in projects %}
+        <li><a href="{% url 'card:new_work' project.id %}">{{project.name}}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
 {% endblock %}

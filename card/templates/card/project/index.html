@@ -20,12 +20,12 @@
 
   {% if completed_projects %}
     <h3>Completed projects:</h3>
-  {% endif %}
 
-  <ul>
-    {% for project in completed_projects %}
-      <li><a href="{% url 'card:view_project' project.id %}">{{project.name}}</a></li>
-    {% endfor %}
-  </ul>
+    <ul>
+      {% for project in completed_projects %}
+        <li><a href="{% url 'card:view_project' project.id %}">{{project.name}}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
 {% endblock %}

@@ -1,6 +1,21 @@
-<h1>Timecard</h1>
-<a href="/card">Home</a> |
-<a href="/card/project">Projects</a>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Timecard</title>
 
-{% block content %}
-{% endblock %}
+  </head>
+  <body>
+    <h1>Timecard</h1>
+    <a href="/card">Home</a> |
+    <a href="/card/project">Projects</a>
+
+    {% block content %}
+    {% endblock %}
+
+    {% load staticfiles %}
+    <script src="{% static 'vendor/jquery.min.js' %}"></script>
+    <script src="{% static 'js/timer.js' %}"></script>
+
+  </body>
+</html>

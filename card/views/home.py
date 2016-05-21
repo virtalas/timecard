@@ -10,7 +10,12 @@ from ..models import Project, Work, User
 
 def index(request):
     projects = Project.objects.order_by('-name')
+    current_work = Work.objects.filter(end_time__isnull=True)
+    current_work = current_work[0]
+
     context = {
-        'projects': projects
+        'projects': projects,
+        'current_work': current_work
     }
+
     return render(request, 'card/index.html', context)

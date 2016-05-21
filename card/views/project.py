@@ -17,11 +17,13 @@ def index(request):
     }
     return render(request, 'card/project/index.html', context)
 
+
 def create(request):
     # user id = 2 until logging in implemented
     p = Project(user_id=2, name=request.POST['name'], start_date=timezone.now())
     p.save()
     return HttpResponseRedirect(reverse('card:project'))
+
 
 def show(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
@@ -35,10 +37,12 @@ def show(request, project_id):
     }
     return render(request, 'card/project/show.html', context)
 
+
 def destroy(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     project.delete()
     return HttpResponseRedirect(reverse('card:project'))
+
 
 def complete(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
