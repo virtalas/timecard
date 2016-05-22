@@ -2,15 +2,15 @@
 
 {% block content %}
 
-
-
   <h3>Hours left today:</h3>
 
-  <span id="hours">1</span> h
-  <span id="minutes">1</span> min
-  <span id="seconds">1</span> sec
+  <span id="hours">{{hours_left}}</span> h
+  <span id="minutes">{{minutes_left}}</span> min
+  <span id="seconds">0</span> sec
 
   {% if current_work %}
+    <!-- Tell timer.js that a work is active -->
+    <div id="timer_active" style="display: none;">True</div>
     <!-- Current work information -->
     <h3>Current timer</h3>
 

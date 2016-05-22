@@ -18,8 +18,10 @@
     <button type="submit" name="button">Delete</button>
   </form>
 
-  <form class="" action="{% url 'card:complete_project' project.id %}" method="post">
-    {% csrf_token %}
-    <button type="submit" name="button">Project completed</button>
-  </form>
+  {% if not completed %}
+    <form class="" action="{% url 'card:complete_project' project.id %}" method="post">
+      {% csrf_token %}
+      <button type="submit" name="button">Project completed</button>
+    </form>
+  {% endif %}
 {% endblock %}

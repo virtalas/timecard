@@ -10,8 +10,10 @@ from ..models import Project, Work, User
 
 def create(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
-    # user = 2 until login implemented
-    project.work_set.create(user_id=2, start_time=timezone.now())
+    # Start timers only for active projects
+    if (project.end_date is None):
+        # user = 2 until login implemented
+        project.work_set.create(user_id=2, start_time=timezone.now())
     return HttpResponseRedirect(reverse('card:index'))
 
 def done(request, work_id):

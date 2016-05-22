@@ -7,8 +7,9 @@
   </head>
   <body>
     <h1>Timecard</h1>
-    <a href="/card">Home</a> |
-    <a href="/card/project">Projects</a>
+    <a href="{% url 'card:index' %}">Home</a> |
+    <a href="{% url 'card:project' %}">Projects</a> |
+    <a href="{% url 'card:balance' %}">Balance</a>
 
     {% block content %}
     {% endblock %}

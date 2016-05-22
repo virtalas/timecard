@@ -9,8 +9,10 @@ from ..models import Project, Work, User
 
 
 def index(request):
-    active_projects = Project.objects.order_by('-name').filter(end_date__isnull=True)
-    completed_projects = Project.objects.filter(end_date__isnull=False)
+    # user id = 2 until logging in implemented
+    user_id = 2
+    active_projects = Project.objects.order_by('-name').filter(end_date__isnull=True, user_id=user_id)
+    completed_projects = Project.objects.filter(end_date__isnull=False, user_id=user_id)
     context = {
         'projects': active_projects,
         'completed_projects': completed_projects
@@ -20,7 +22,8 @@ def index(request):
 
 def create(request):
     # user id = 2 until logging in implemented
-    p = Project(user_id=2, name=request.POST['name'], start_date=timezone.now())
+    user_id = 2
+    p = Project(user_id=user_id, name=request.POST['name'], start_date=timezone.now())
     p.save()
     return HttpResponseRedirect(reverse('card:project'))
 
