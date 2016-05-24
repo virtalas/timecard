@@ -2,36 +2,45 @@
 
 {% block content %}
 
-  <h3>Hours left today:</h3>
+  {% if user.is_authenticated %}
+    <!-- User logged in -->
+    <h3>Hours left today:</h3>
 
-  <span id="hours">{{hours_left}}</span> h
-  <span id="minutes">{{minutes_left}}</span> min
-  <span id="seconds">0</span> sec
+    <span id="hours">{{hours_left}}</span> h
+    <span id="minutes">{{minutes_left}}</span> min
+    <span id="seconds">0</span> sec
 
-  {% if current_work %}
-    <!-- Tell timer.js that a work is active -->
-    <div id="timer_active" style="display: none;">True</div>
-    <!-- Current work information -->
-    <h3>Current timer</h3>
+    {% if current_work %}
+      <!-- Tell timer.js that a work is active -->
+      <div id="timer_active" style="display: none;">True</div>
+      <!-- Current work information -->
+      <h3>Current timer</h3>
 
-    <b>Start time</b><br>
-    {{current_work.start_time|date:"H:i j.m.Y"}}<br><br>
+      <b>Start time</b><br>
+      {{current_work.start_time|date:"H:i j.m.Y"}}<br><br>
 
-    <b>Project</b><br>
-    {{current_work.project.name}}<br><br>
+      <b>Project</b><br>
+      {{current_work.project.name}}<br><br>
 
-    <form action="{% url 'card:work_done' current_work.id %}" method="post">
-      {% csrf_token %}
-      <input type="submit" value="Stop timer" />
-    </form>
+      <form action="{% url 'card:work_done' current_work.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Stop timer" />
+      </form>
+    {% else %}
+      <!-- No current work, display interface for starting a timer/work -->
+      <h4>Start a timer for project:</h4>
+      <ul>
+        {% for project in projects %}
+          <li><a href="{% url 'card:new_work' project.id %}">{{project.name}}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
   {% else %}
-    <!-- No current work, display interface for starting a timer/work -->
-    <h4>Start a timer for project:</h4>
-    <ul>
-      {% for project in projects %}
-        <li><a href="{% url 'card:new_work' project.id %}">{{project.name}}</a></li>
-      {% endfor %}
-    </ul>
+    <!-- User not logged in -->
+    <h3>Welcome to timecard</h3>
+    Start by logging in.
+
   {% endif %}
 
 {% endblock %}

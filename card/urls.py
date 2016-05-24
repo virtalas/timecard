@@ -16,4 +16,12 @@ urlpatterns = [
     url(r'^(?P<work_id>[0-9]+)/work/done/$', views.work.done, name='work_done'),
 
     url(r'^balance/$', views.balance.index, name='balance'),
+
+    url(r'^history/$', views.history.index, name='history'),
+
+    url(r'^login+$', views.user.login_show, name='login_show'),
+    url(r'^login/user/$', views.user.login_user, name='login'),
+    url(r'^register/$', views.user.register_show, name='register_show'),
+    url(r'^register/user/$', views.user.register_user, name='register'),
+    url(r'^logout/$', views.user.logout_user, name='logout'),
 ]

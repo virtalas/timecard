@@ -8,6 +8,10 @@ from django.utils import timezone
 import time
 from ..models import Project, Work, User
 
+from django.contrib.auth.decorators import login_required
+
+
+@login_required(login_url='/card/login')
 def index(request):
     # user id = 2 until logging in implemented
     user_id = 2

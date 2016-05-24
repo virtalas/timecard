@@ -1,3 +1,4 @@
 timecard/settings.py
 timecard/settings.pyc
 .DS_store
+*.pyc

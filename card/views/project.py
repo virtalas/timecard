@@ -7,7 +7,10 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from ..models import Project, Work, User
 
+from django.contrib.auth.decorators import login_required
 
+
+@login_required(login_url='/card/login')
 def index(request):
     # user id = 2 until logging in implemented
     user_id = 2
@@ -19,7 +22,7 @@ def index(request):
     }
     return render(request, 'card/project/index.html', context)
 
-
+@login_required(login_url='/card/login')
 def create(request):
     # user id = 2 until logging in implemented
     user_id = 2
@@ -27,7 +30,7 @@ def create(request):
     p.save()
     return HttpResponseRedirect(reverse('card:project'))
 
-
+@login_required(login_url='/card/login')
 def show(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     if project.end_date is None:
@@ -40,13 +43,13 @@ def show(request, project_id):
     }
     return render(request, 'card/project/show.html', context)
 
-
+@login_required(login_url='/card/login')
 def destroy(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     project.delete()
     return HttpResponseRedirect(reverse('card:project'))
 
-
+@login_required(login_url='/card/login')
 def complete(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     project.end_date = timezone.now()
