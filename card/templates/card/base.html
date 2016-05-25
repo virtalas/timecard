@@ -28,16 +28,17 @@
               <li><a href="{% url 'card:project' %}">Projects</a></li>
               <li><a href="{% url 'card:balance' %}">Balance</a></li>
               <li><a href="{% url 'card:history' %}">History</a></li>
+              <li><a href="{% url 'card:settings' %}">Settings</a></li>
           </ul>
 
           {% if user.is_authenticated %}
             <form class="navbar-form navbar-right" method="post" action="{% url 'card:logout' %}">
               {% csrf_token %}
-              <button type="submit" class="btn btn-success">Kirjaudu ulos</button>
+              <button type="submit" class="btn btn-success">Log out</button>
             </form>
           {% else %}
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="{% url 'card:login_show' %}">Kirjaudu sisään</a></li>
+              <li><a href="{% url 'card:login_show' %}">Log in</a></li>
             </ul>
           {% endif %}
 

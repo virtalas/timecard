@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 
 from django.contrib.auth import authenticate, login, logout
 
+from django.contrib.auth.decorators import login_required
+
 
 def login_show(request):
     return render(request, 'card/user/login.html')
@@ -42,6 +44,11 @@ def register_user(request):
         user = User.objects.create_user(first_name=name, username=email, email=email, password=password1)
         user_auth = authenticate(username=email, password=password1)
         login(request, user_auth)
+
+        # Create minutes_per_day for this user
+        minutes = Minutes(user_id=user.id, minutes_per_day=0)
+        minutes.save()
+
         return HttpResponseRedirect(reverse('card:index'))
     else:
         context = {
@@ -54,3 +61,26 @@ def register_user(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('card:index'))
+
+@login_required(login_url='/card/login')
+def settings(request):
+    user = request.user
+    minutes_per_day = Minutes.objects.filter(user_id=user.id)
+    hours_per_day = round(minutes_per_day[0].minutes_per_day / 60.0, 1)
+
+    context = {
+        'hours_per_day': hours_per_day,
+        'minutes_per_day': minutes_per_day[0].minutes_per_day
+    }
+
+    return render(request, 'card/user/settings.html', context)
+
+@login_required(login_url='/card/login')
+def change_settings(request):
+    hours_per_day = float(request.POST['hours_per_day'])
+    minutes = Minutes.objects.filter(user_id=request.user.id)
+    m = minutes[0]
+    m.minutes_per_day = int(hours_per_day * 60)
+    m.save()
+
+    return HttpResponseRedirect(reverse('card:settings'))
