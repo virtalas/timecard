@@ -6,15 +6,14 @@ from django.core.urlresolvers import reverse
 
 from django.utils import timezone
 import time
-from ..models import Project, Work, User
+from ..models import Project, Work, Minutes
 
 from django.contrib.auth.decorators import login_required
 
 
 @login_required(login_url='/card/login')
 def index(request):
-    # user id = 2 until logging in implemented
-    user_id = 2
+    user_id = request.user.id
     all_work = Work.objects.filter(end_time__isnull=False, user_id=user_id)
     work_days = {}
 
@@ -34,9 +33,9 @@ def index(request):
     print(work_days)
 
     total_balance_minutes = 0
-    # user's own hours_per_day
-    hours_per_day = 7.4
-    minutes_per_day = hours_per_day * 60
+
+    minutes_per_day = Minutes.objects.minutes_per_day(user_id)
+    hours_per_day = Minutes.objects.hours_per_day(user_id)
 
     for date, minutes_of_work in work_days.iteritems():
         total_balance_minutes += minutes_of_work - minutes_per_day

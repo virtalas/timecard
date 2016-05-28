@@ -46,7 +46,7 @@ def register_user(request):
         login(request, user_auth)
 
         # Create minutes_per_day for this user
-        minutes = Minutes(user_id=user.id, minutes_per_day=0)
+        minutes = Minutes(user_id=user.id, minutes_per_day=480) # default 8h = 480min
         minutes.save()
 
         return HttpResponseRedirect(reverse('card:index'))
@@ -64,13 +64,15 @@ def logout_user(request):
 
 @login_required(login_url='/card/login')
 def settings(request):
-    user = request.user
-    minutes_per_day = Minutes.objects.filter(user_id=user.id)
-    hours_per_day = round(minutes_per_day[0].minutes_per_day / 60.0, 1)
+    user_id = request.user.id
+    minutes_per_day = Minutes.objects.minutes_per_day(user_id)
+    hours_per_day = Minutes.objects.hours_per_day(user_id)
 
     context = {
         'hours_per_day': hours_per_day,
-        'minutes_per_day': minutes_per_day[0].minutes_per_day
+        'minutes_per_day': minutes_per_day,
+        'full_hours': int(minutes_per_day / 60),
+        'leftover_minutes': minutes_per_day % 60
     }
 
     return render(request, 'card/user/settings.html', context)

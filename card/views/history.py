@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from datetime import date
 import time
 from django.utils import timezone
-from ..models import Project, Work, User
+from ..models import Project, Work, Minutes
 
 from django.contrib.auth.decorators import login_required
 

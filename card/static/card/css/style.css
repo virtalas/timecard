@@ -2,3 +2,8 @@
   margin-left: 200px;
   margin-right: 200px;
 }
+
+.timer li {
+  list-style-type: none;
+  margin: 10px -20px;
+}

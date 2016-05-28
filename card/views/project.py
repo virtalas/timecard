@@ -5,15 +5,14 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
 from django.utils import timezone
-from ..models import Project, Work, User
+from ..models import Project, Work, Minutes
 
 from django.contrib.auth.decorators import login_required
 
 
 @login_required(login_url='/card/login')
 def index(request):
-    # user id = 2 until logging in implemented
-    user_id = 2
+    user_id = request.user.id
     active_projects = Project.objects.order_by('-name').filter(end_date__isnull=True, user_id=user_id)
     completed_projects = Project.objects.filter(end_date__isnull=False, user_id=user_id)
     context = {
@@ -24,8 +23,7 @@ def index(request):
 
 @login_required(login_url='/card/login')
 def create(request):
-    # user id = 2 until logging in implemented
-    user_id = 2
+    user_id = request.user.id
     p = Project(user_id=user_id, name=request.POST['name'], start_date=timezone.now())
     p.save()
     return HttpResponseRedirect(reverse('card:project'))

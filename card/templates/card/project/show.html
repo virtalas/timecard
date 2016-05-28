@@ -13,15 +13,19 @@
     </p>
   {% endif %}
 
+  <br>
+
   <form class="" action="{% url 'card:destroy_project' project.id %}" method="post">
     {% csrf_token %}
-    <button type="submit" name="button">Delete</button>
+    <button type="submit" name="button" class="btn btn-danger">Delete</button>
   </form>
+
+  <br>
 
   {% if not completed %}
     <form class="" action="{% url 'card:complete_project' project.id %}" method="post">
       {% csrf_token %}
-      <button type="submit" name="button">Project completed</button>
+      <button type="submit" name="button" class="btn btn-default">Project completed</button>
     </form>
   {% endif %}
 {% endblock %}

@@ -4,15 +4,26 @@
 
   {% if user.is_authenticated %}
     <!-- User logged in -->
-    <h3>Hours left today:</h3>
 
+    <!-- Tell timer.js if today's balance is negative -->
+    <div id="negative" style="display: none;">{{negative}}</div>
+
+    <h3>Time left today</h3>
+
+    {% if negative %}
+      -
+    {% endif %}
     <span id="hours">{{hours_left}}</span> h
     <span id="minutes">{{minutes_left}}</span> min
-    <span id="seconds">0</span> sec
 
     {% if current_work %}
+      <span id="seconds">0</span> sec
+
+      <br><br>
+
       <!-- Tell timer.js that a work is active -->
       <div id="timer_active" style="display: none;">True</div>
+
       <!-- Current work information -->
       <h3>Current timer</h3>
 
@@ -24,16 +35,19 @@
 
       <form action="{% url 'card:work_done' current_work.id %}" method="post">
         {% csrf_token %}
-        <input type="submit" value="Stop timer" />
+        <input type="submit" class="btn btn-default" value="Stop timer" />
       </form>
     {% else %}
       <!-- No current work, display interface for starting a timer/work -->
-      <h4>Start a timer for project:</h4>
-      <ul>
-        {% for project in projects %}
-          <li><a href="{% url 'card:new_work' project.id %}">{{project.name}}</a></li>
-        {% endfor %}
-      </ul>
+      <h3>Start a timer for project</h3>
+        <ul class="timer">
+          {% for project in projects %}
+            <li><a href="{% url 'card:new_work' project.id %}" class="btn btn-default">{{project.name}}</a></li>
+          {% empty %}
+            No projects.
+          {% endfor %}
+        </ul>
+
     {% endif %}
 
   {% else %}
