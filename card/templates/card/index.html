@@ -50,6 +50,41 @@
 
     {% endif %}
 
+    <h3>Add work time</h3>
+
+    <form action="" method="post">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-xs-3">
+          <label>Project</label>
+        </div>
+        <div class="col-xs-3">
+          <label>Start time</label>
+        </div>
+        <div class="col-xs-3">
+          <label>End time</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-3">
+          <select class="form-control" name="project_id">
+            {% for project in projects %}
+              <option value="{{project.id}}">{{project.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-xs-3">
+          <input type="text" name="start_time" class="form-control" value='{% now "Y-m-d H:i" %}'>
+        </div>
+        <div class="col-xs-3">
+          <input type="text" name="end_time" class="form-control" value='{% now "Y-m-d H:i" %}'>
+        </div>
+        <div class="col-xs-1">
+          <input type="submit" class="btn btn-primary" value="Add" />
+        </div>
+      </div>
+    </form>
+
   {% else %}
     <!-- User not logged in -->
     <h3>Welcome to timecard</h3>
