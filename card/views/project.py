@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url='/card/login')
 def index(request):
     user_id = request.user.id
-    active_projects = Project.objects.order_by('-name').filter(end_date__isnull=True, user_id=user_id)
+    active_projects = Project.objects.order_by('name').filter(end_date__isnull=True, user_id=user_id)
     completed_projects = Project.objects.filter(end_date__isnull=False, user_id=user_id)
     context = {
         'projects': active_projects,

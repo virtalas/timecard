@@ -2,6 +2,10 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 
+from django.utils import timezone
+import time
+
+
 class TimeManager(models.Manager):
     def minutes_per_day(self, user_id):
         return Minutes.objects.filter(user_id=user_id)[0].minutes_per_day
@@ -25,3 +29,14 @@ class Work(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     start_time = models.DateTimeField('date started')
     end_time = models.DateTimeField('date finished', null=True)
+
+    def seconds_of_work(self):
+        d1_ts = time.mktime(self.start_time.timetuple())
+        d2_ts = time.mktime(self.end_time.timetuple())
+        return int(d2_ts - d1_ts)
+
+    def hours_and_minutes_of_work(self):
+        seconds = self.seconds_of_work()
+        m, s = divmod(seconds, 60)
+        h, m = divmod(m, 60)
+        return str(h) + " h " + str(m) + " min"

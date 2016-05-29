@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     if request.user.is_authenticated():
         user_id = request.user.id
-        active_projects = Project.objects.order_by('-name').filter(end_date__isnull=True, user_id=user_id)
+        active_projects = Project.objects.order_by('name').filter(end_date__isnull=True, user_id=user_id)
         current_work_list = Work.objects.filter(end_time__isnull=True, user_id=user_id)
         current_work = None
 
@@ -33,9 +33,7 @@ def index(request):
         todays_work = Work.objects.filter(end_time__isnull=False, start_time__year=today.year, start_time__month=today.month, start_time__day=today.day, user_id=user_id)
 
         for work in todays_work:
-            d1_ts = time.mktime(work.start_time.timetuple())
-            d2_ts = time.mktime(work.end_time.timetuple())
-            seconds_of_work += d2_ts - d1_ts
+            seconds_of_work += work.seconds_of_work()
 
         minutes_of_work = int(seconds_of_work / 60)
         minutes_per_day = Minutes.objects.minutes_per_day(user_id)

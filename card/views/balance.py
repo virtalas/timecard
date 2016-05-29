@@ -4,8 +4,6 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
-from django.utils import timezone
-import time
 from ..models import Project, Work, Minutes
 
 from django.contrib.auth.decorators import login_required
@@ -20,9 +18,7 @@ def index(request):
     for work in all_work:
         work_date = "" + str(work.start_time.year) + "-" + str(work.start_time.month) + "-" + str(work.start_time.day)
 
-        d1_ts = time.mktime(work.start_time.timetuple())
-        d2_ts = time.mktime(work.end_time.timetuple())
-        minutes_of_work = int(d2_ts - d1_ts) / 60
+        minutes_of_work = work.seconds_of_work() / 60
 
         # Store minutes of work per day in a dict with date as key
         if work_date in work_days:
