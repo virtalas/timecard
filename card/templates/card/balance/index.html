@@ -1,6 +1,85 @@
 {% extends 'card/base.html' %}
 
 {% block content %}
+
+  {% load get_item %}
+  {% load subtract %}
+
   <h3>Total balance</h3>
-  {{total_balance}} plus hours
+  {{total_balance}} extra hours
+
+  {% if error %}
+    <div class="alert alert-danger">
+      {{error}}
+    </div>
+  {% endif %}
+
+  <h3>Reports</h3>
+
+  <form action="{% url 'card:report' %}" method="post">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-xs-3">
+        <label>Start date</label>
+      </div>
+      <div class="col-xs-3">
+        <label>End date</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">
+        <input type="text" name="start_d" class="form-control" value='{% if start_date %}{{start_date}}{% else %}{% now "Y-m-d" %}{% endif %}'>
+      </div>
+      <div class="col-xs-3">
+        <input type="text" name="end_d" class="form-control" value='{% if end_date %}{{end_date}}{% else %}{% now "Y-m-d" %}{% endif %}'>
+      </div>
+      <div class="col-xs-1">
+        <input type="submit" class="btn btn-primary" value="Generate report" />
+      </div>
+    </div>
+  </form>
+
+  {% if report %}
+
+    <br><br>
+
+    {% for work_date, work_list in work_days_information.items %}
+      <h4>{{work_date}}</h4>
+      <div class="indented">
+        <table class="report">
+          <tr>
+            <th>Project</th>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Minutes</th>
+          </tr>
+          {% for work in work_list %}
+            <tr>
+              <td style="min-width: 100px;">{{work.project}}</td>
+              <td style="min-width: 100px;">{{work.start_time|date:"H.i"}}</td>
+              <td style="min-width: 100px;">{{work.end_time|date:"H.i"}}</td>
+              <td style="min-width: 50px; text-align: right;">{{work.minutes_of_work}}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td>total:</td>
+            <td></td>
+            <td></td>
+            <td style="min-width: 50px; text-align: right;">{{work_days_minutes|get_item:work_date}}</td>
+          </tr>
+          <tr>
+            <td>balance:</td>
+            <td></td>
+            <td></td>
+            {% with total=work_days_minutes|get_item:work_date %}
+            <td style="min-width: 50px; text-align: right;">{{total|subtract:minutes_per_day}}</td>
+            {% endwith %}
+          </tr>
+        </table>
+      </div>
+      <br>
+    {% endfor %}
+
+  {% endif %}
+
 {% endblock %}

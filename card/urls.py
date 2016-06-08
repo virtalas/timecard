@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^work/add/new$', views.work.add_new_work, name='add_new_work'),
 
     url(r'^balance/$', views.balance.index, name='balance'),
+    url(r'^balance/report/$', views.balance.report, name='report'),
 
     url(r'^history/$', views.history.index, name='history'),
 

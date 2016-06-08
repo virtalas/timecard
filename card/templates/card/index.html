@@ -48,9 +48,8 @@
           {% endfor %}
         </ul>
 
+        <a href="{% url 'card:add_work' %}">Add work with a custom time period</a>
     {% endif %}
-
-    <a href="{% url 'card:add_work' %}">Add work with a custom time period</a>
 
   {% else %}
     <!-- User not logged in -->

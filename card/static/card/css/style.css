@@ -12,3 +12,12 @@ a.disabled_link {
 	pointer-events: none;
   cursor: default;
 }
+
+.indented{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+table.report tr td, table.report tr th {
+  padding-left: 15px;
+}
