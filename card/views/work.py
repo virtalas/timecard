@@ -55,3 +55,47 @@ def add_new_work(request):
         }
 
         return render(request, 'card/work/add.html', context)
+
+@login_required(login_url='/card/login')
+def edit(request, work_id):
+    work = get_object_or_404(Work, pk=work_id)
+    user_id = request.user.id
+    active_projects = Project.objects.order_by('name').filter(end_date__isnull=True, user_id=user_id)
+
+    context = {
+        "projects": active_projects,
+        "start_time": work.start_time,
+        "end_time": work.end_time,
+        "project_id": work.project_id,
+        "work_id": work.id
+    }
+
+    return render(request, 'card/work/edit.html', context)
+
+@login_required(login_url='/card/login')
+def update(request, work_id):
+    user_id = request.user.id
+    work = get_object_or_404(Work, pk=work_id)
+    project_id = request.POST['project_id']
+    start_time = request.POST['start_time']
+    end_time = request.POST['end_time']
+
+    try:
+        work.project_id = project_id
+        work.start_time = start_time
+        work.end_time = end_time
+        work.save()
+        return HttpResponseRedirect(reverse('card:history'))
+    except:
+        active_projects = Project.objects.order_by('name').filter(end_date__isnull=True, user_id=user_id)
+
+        context = {
+            "error": "Date was given incorrectly.",
+            "projects": active_projects,
+            "start_time": start_time,
+            "end_time": end_time,
+            "project_id": int(project_id),
+            "work_id": work_id
+        }
+
+        return render(request, 'card/work/edit.html', context)

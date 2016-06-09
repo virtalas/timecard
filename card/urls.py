@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^(?P<work_id>[0-9]+)/work/done/$', views.work.done, name='work_done'),
     url(r'^work/add/$', views.work.add, name='add_work'),
     url(r'^work/add/new$', views.work.add_new_work, name='add_new_work'),
+    url(r'^(?P<work_id>[0-9]+)/work/edit/$', views.work.edit, name='edit_work'),
+    url(r'^(?P<work_id>[0-9]+)/work/update/$', views.work.update, name='update_work'),
 
     url(r'^balance/$', views.balance.index, name='balance'),
     url(r'^balance/report/$', views.balance.report, name='report'),

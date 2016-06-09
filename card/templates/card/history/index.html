@@ -20,7 +20,7 @@
           <td>{{work.start_time|date:"H:i, d.m.Y"}}</td>
           <td>{{work.end_time|date:"H:i, d.m.Y"}}</td>
           <td>{{work.hours_and_minutes_of_work}}</td>
-          <td><a href="">Edit</a></td>
+          <td><a href="{% url 'card:edit_work' work.id %}">Edit</a></td>
         </tr>
       {% endfor %}
     </tbody>
