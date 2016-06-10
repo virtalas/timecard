@@ -80,6 +80,22 @@
       <br>
     {% endfor %}
 
+    <h4>Projects</h4>
+    <div class="indented">
+      <table class="report">
+        <tr>
+          <th>Project</th>
+          <th>Minutes</th>
+        </tr>
+        {% for project_id, project in project_minutes.items %}
+          <tr>
+            <td>{{project.name}}</td>
+            <td>{{project.minutes_of_work}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+
   {% endif %}
 
 {% endblock %}

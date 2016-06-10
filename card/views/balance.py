@@ -36,6 +36,7 @@ def report(request):
     selected_work = all_work.filter(start_time__gte=start_date, start_time__lt=end_date + datetime.timedelta(days=1))
 
     work_days_information = {}
+    project_minutes = {}
 
     for work in selected_work:
         work_date = "" + str(work.start_time.year) + "-" + str(work.start_time.month) + "-" + str(work.start_time.day)
@@ -53,6 +54,15 @@ def report(request):
         else:
             work_days_information[work_date] = [formatted_work]
 
+        # Keep track of minutes per project
+        if str(work.project_id) in project_minutes:
+            project_minutes[str(work.project_id)]['minutes_of_work'] += minutes_of_work
+        else:
+            project_minutes[str(work.project_id)] = {
+                "name": work.project.name,
+                "minutes_of_work": minutes_of_work
+            }
+
     context = {
         'report': True,
         'total_balance': hours,
@@ -60,7 +70,8 @@ def report(request):
         'end_date': request.POST['end_d'],
         'work_days_information': work_days_information,
         'work_days_minutes': work_days_minutes,
-        'minutes_per_day': Minutes.objects.minutes_per_day(user_id)
+        'minutes_per_day': Minutes.objects.minutes_per_day(user_id),
+        'project_minutes': project_minutes
     }
 
     return render(request, 'card/balance/index.html', context)
