@@ -16,6 +16,8 @@ class TimeManager(models.Manager):
 class Minutes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     minutes_per_day = models.IntegerField()
+    start_date = models.DateTimeField('date started')
+    end_date = models.DateTimeField('date finished', null=True)
     objects = TimeManager()
 
 class Project(models.Model):
@@ -32,7 +34,10 @@ class Work(models.Model):
 
     def seconds_of_work(self):
         d1_ts = time.mktime(self.start_time.timetuple())
-        d2_ts = time.mktime(self.end_time.timetuple())
+        if self.end_time is not None:
+            d2_ts = time.mktime(self.end_time.timetuple())
+        else:
+            d2_ts = time.mktime(timezone.now().timetuple())
         return int(d2_ts - d1_ts)
 
     def hours_and_minutes_of_work(self):

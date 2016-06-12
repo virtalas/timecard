@@ -106,3 +106,9 @@ def update(request, work_id):
         }
 
         return render(request, 'card/work/edit.html', context)
+
+@login_required(login_url='/card/login')
+def delete(request, work_id):
+    work = get_object_or_404(Work, pk=work_id)
+    work.delete()
+    return HttpResponseRedirect(reverse('card:history'))
