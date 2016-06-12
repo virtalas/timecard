@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
+import datetime
 from django.utils import timezone
 from ..models import Project, Work, Minutes
 from django.contrib.auth.models import User
@@ -46,7 +47,7 @@ def register_user(request):
         login(request, user_auth)
 
         # Create minutes_per_day for this user
-        minutes = Minutes(user_id=user.id, minutes_per_day=480) # default 8h = 480min
+        minutes = Minutes(user_id=user.id, minutes_per_day=480, start_date=datetime.datetime.now().replace(hour=0, minute=0))
         minutes.save()
 
         return HttpResponseRedirect(reverse('card:index'))
@@ -65,24 +66,43 @@ def logout_user(request):
 @login_required(login_url='/card/login')
 def settings(request):
     user_id = request.user.id
-    minutes_per_day = Minutes.objects.minutes_per_day(user_id)
-    hours_per_day = Minutes.objects.hours_per_day(user_id)
+    # minutes_per_day = Minutes.objects.minutes_per_day(user_id)
+    # hours_per_day = Minutes.objects.hours_per_day(user_id)
+    minutes = Minutes.objects.filter(user_id=user_id).order_by("-start_date")
+    current_minutes_per_day = Minutes.objects.current_minutes_per_day(user_id)
+    current_hours_per_day = Minutes.objects.current_hours_per_day(user_id)
 
     context = {
-        'hours_per_day': hours_per_day,
-        'minutes_per_day': minutes_per_day,
-        'full_hours': int(minutes_per_day / 60),
-        'leftover_minutes': minutes_per_day % 60
+        'minutes': minutes,
+        'current_minutes_per_day': current_minutes_per_day,
+        'current_hours_per_day': current_hours_per_day,
+        'full_hours': int(current_minutes_per_day / 60),
+        'leftover_minutes': current_minutes_per_day % 60
     }
 
     return render(request, 'card/user/settings.html', context)
 
 @login_required(login_url='/card/login')
-def change_settings(request):
-    hours_per_day = float(request.POST['hours_per_day'])
-    minutes = Minutes.objects.filter(user_id=request.user.id)
-    m = minutes[0]
-    m.minutes_per_day = int(hours_per_day * 60)
+def new_hours_per_day(request):
+    user_id = request.user.id
+
+    if not request.POST['end_date']:
+        # User is changing the currently active hours per day
+        end_date = None
+        # Deal with the currently active one first
+        current_m_list = Minutes.objects.filter(user_id=user_id, end_date__isnull=True)
+        current_m = current_m_list[0]
+        current_m.end_date = datetime.datetime.now().date()
+        current_m.save()
+    else:
+        # User is adding an hours per day for a past time period
+        end_date = request.POST['end_date']
+
+    start_date = datetime.datetime.strptime(request.POST['start_date'], "%Y-%m-%d").date()
+    hours = float(request.POST['hours'])
+    minutes_per_day = int(hours * 60)
+
+    m = Minutes(user_id=user_id, minutes_per_day=minutes_per_day, start_date=start_date, end_date=end_date)
     m.save()
 
     return HttpResponseRedirect(reverse('card:settings'))

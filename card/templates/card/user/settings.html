@@ -1,18 +1,71 @@
 {% extends 'card/base.html' %}
 
 {% block content %}
-  <form action="{% url 'card:change_settings' %}" method="post">
+
+  <h3>Currently</h3>
+  Your hours per day is currently set to <b>{{current_hours_per_day}} h</b>, or {{full_hours}} h {{leftover_minutes}} min.
+
+  <h3>Change or add</h3>
+  To change your current hours per day to a new one, leave 'end date' empty.<br>
+  The currently active hours per day will have its end date set to today.
+  <br><br>
+
+  <form action="{% url 'card:new_hours_per_day' %}" method="post">
     {% csrf_token %}
-    <label for="hours_per_day">Hours per day</label>
     <div class="row">
       <div class="col-xs-2">
-        <input class="form-control" type="text" value="{{hours_per_day}}" name="hours_per_day"/>
+        <label>Start date</label>
       </div>
-      <button class="btn btn-primary" type="submit">Change</button>
+      <div class="col-xs-2">
+        <label>End date</label>
+      </div>
+      <div class="col-xs-2">
+        <label>Hours per day</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-2">
+        <input type="text" name="start_date" value="{% now 'Y-m-d' %}" class="form-control">
+      </div>
+      <div class="col-xs-2">
+        <input type="text" name="end_date" value="" class="form-control">
+      </div>
+      <div class="col-xs-2">
+        <input type="text" name="hours" value="8.0" class="form-control">
+      </div>
+      <div class="col-xs-2">
+        <button class="btn btn-primary" type="submit">Add</button>
+      </div>
     </div>
   </form>
 
-  <br>
-  Your hours per day is currently set to {{full_hours}} h {{leftover_minutes}} min ({{minutes_per_day}} minutes).
+  <br><br>
+
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Start date</th>
+        <th>End date</th>
+        <th>Hours per day</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for minute in minutes %}
+        <tr>
+          <td>{{minute.start_date}}</td>
+          <td>
+            {% if minute.end_date == None %}
+              Currently active
+            {% else %}
+              {{minute.end_date}}
+            {% endif %}
+          </td>
+          <td>{{minute.hours_per_day}}</td>
+          <td>Edit</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}

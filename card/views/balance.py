@@ -36,13 +36,13 @@ def report(request):
     for work_date in work_days_hours:
         work_days_hours[work_date] = round(work_days_hours[work_date] / 60.0, 2)
 
-
     start_date = datetime.datetime.strptime(request.POST['start_d'], '%Y-%m-%d')
     end_date = datetime.datetime.strptime(request.POST['end_d'], '%Y-%m-%d')
     selected_work = all_work.filter(start_time__gte=start_date, start_time__lt=end_date + datetime.timedelta(days=1))
 
     work_days_information = {}
     project_time = {}
+    hours_per_day = {}
 
     for work in selected_work:
         work_date = "" + str(work.start_time.year) + "-" + str(work.start_time.month) + "-" + str(work.start_time.day)
@@ -71,6 +71,10 @@ def report(request):
                 "hours_of_work": 0.0
             }
 
+        # Store each day's required work time in a dict with date as key and time as value
+        if work_date not in hours_per_day:
+            hours_per_day[work_date] = Minutes.objects.hours_per_day(user_id, work_date)
+
     # Change minutes to hours per project
     for project_id_str in project_time:
         project_time[project_id_str]['hours_of_work'] = round(project_time[project_id_str]['minutes_of_work'] / 60.0, 2)
@@ -82,10 +86,10 @@ def report(request):
         'end_date': request.POST['end_d'],
         'work_days_information': work_days_information,
         'work_days_hours': work_days_hours,
-        'hours_per_day': Minutes.objects.hours_per_day(user_id),
+        'hours_per_day': hours_per_day,
         'project_time': project_time
     }
-
+    print Minutes.objects.hours_per_day(user_id, "2016-04-13")
     return render(request, 'card/balance/index.html', context)
 
 def minutes_of_work_per_day(all_work):
@@ -106,10 +110,8 @@ def minutes_of_work_per_day(all_work):
 def total_balance_hours(all_work, user_id, work_days):
     total_balance_minutes = 0
 
-    minutes_per_day = Minutes.objects.minutes_per_day(user_id)
-    hours_per_day = Minutes.objects.hours_per_day(user_id)
-
     for date, minutes_of_work in work_days.iteritems():
+        minutes_per_day = Minutes.objects.minutes_per_day(user_id, date)
         total_balance_minutes += minutes_of_work - minutes_per_day
 
     hours = round(total_balance_minutes / 60.0, 2)

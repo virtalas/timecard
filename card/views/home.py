@@ -36,7 +36,7 @@ def index(request):
             seconds_of_work += work.seconds_of_work()
 
         minutes_of_work = int(seconds_of_work / 60)
-        minutes_per_day = Minutes.objects.minutes_per_day(user_id)
+        minutes_per_day = Minutes.objects.current_minutes_per_day(user_id)
 
         # Is today's balance positive or negative
         if minutes_per_day - minutes_of_work < 0:

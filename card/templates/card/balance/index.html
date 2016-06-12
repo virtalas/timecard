@@ -71,8 +71,8 @@
             <td>balance:</td>
             <td></td>
             <td></td>
-            {% with total=work_days_hours|get_item:work_date %}
-            <td style="min-width: 50px; text-align: right;">{{total|subtract:hours_per_day}}</td>
+            {% with total=work_days_hours|get_item:work_date hours=hours_per_day|get_item:work_date %}
+            <td style="min-width: 50px; text-align: right;">{{total|subtract:hours}}</td>
             {% endwith %}
           </tr>
         </table>

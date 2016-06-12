@@ -4,14 +4,27 @@ from django.contrib.auth.models import User
 
 from django.utils import timezone
 import time
+import datetime
 
 
 class TimeManager(models.Manager):
-    def minutes_per_day(self, user_id):
-        return Minutes.objects.filter(user_id=user_id)[0].minutes_per_day
+    def current_minutes_per_day(self, user_id):
+        minutes = Minutes.objects.filter(user_id=user_id, end_date__isnull=True)
+        return minutes[0].minutes_per_day
 
-    def hours_per_day(self, user_id):
-        return self.minutes_per_day(user_id) / 60.0
+    def current_hours_per_day(self, user_id):
+        return self.current_minutes_per_day(user_id) / 60.0
+
+    def minutes_per_day(self, user_id, given_date):
+        date = datetime.datetime.strptime(given_date, "%Y-%m-%d").date()
+        minutes = Minutes.objects.filter(user_id=user_id, start_date__lte=date, end_date__gte=date)
+        if minutes:
+            return minutes[0].minutes_per_day
+        else:
+            return self.current_minutes_per_day(user_id)
+
+    def hours_per_day(self, user_id, given_date):
+        return self.minutes_per_day(user_id, given_date) / 60.0
 
 class Minutes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -19,6 +32,9 @@ class Minutes(models.Model):
     start_date = models.DateTimeField('date started')
     end_date = models.DateTimeField('date finished', null=True)
     objects = TimeManager()
+
+    def hours_per_day(self):
+        return round(self.minutes_per_day / 60.0, 2)
 
 class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
