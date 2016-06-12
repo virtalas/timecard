@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^(?P<project_id>[0-9]+)/project/delete$', views.project.destroy, name='destroy_project'),
     url(r'^(?P<project_id>[0-9]+)/project/complete$', views.project.complete, name='complete_project'),
 
-    url(r'^(?P<project_id>[0-9]+)/work/new/$', views.work.create, name='new_work'),
+    url(r'^(?P<project_id>[0-9]+)/work/new/$', views.work.start_new_work, name='new_work'),
     url(r'^(?P<work_id>[0-9]+)/work/done/$', views.work.done, name='work_done'),
     url(r'^work/add/$', views.work.add, name='add_work'),
     url(r'^work/add/new$', views.work.add_new_work, name='add_new_work'),

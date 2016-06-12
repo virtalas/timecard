@@ -21,3 +21,7 @@ a.disabled_link {
 table.report tr td, table.report tr th {
   padding-left: 15px;
 }
+
+table.report {
+  width: 600px;
+}

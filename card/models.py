@@ -40,3 +40,8 @@ class Work(models.Model):
         m, s = divmod(seconds, 60)
         h, m = divmod(m, 60)
         return str(h) + " h " + str(m) + " min"
+
+    def validate_date_range(self):
+        if self.end_time < self.start_time:
+            return False
+        return True

@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
+from datetime import datetime
 from django.utils import timezone
 from ..models import Project, Work, Minutes
 
@@ -11,12 +12,18 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required(login_url='/card/login')
-def create(request, project_id):
+def start_new_work(request, project_id):
+    # Get start time from GET-parameters
+    start_hour = int(request.GET.get("start_hour"))
+    start_minute = int(request.GET.get("start_minute"))
+    start_time = datetime.now().replace(hour=start_hour, minute=start_minute)
+    # start_time = timezone.localtime(start_time)
+
     project = get_object_or_404(Project, pk=project_id)
     # Start timers only for active projects
     if (project.end_date is None):
         user_id = request.user.id
-        project.work_set.create(user_id=user_id, start_time=timezone.now())
+        project.work_set.create(user_id=user_id, start_time=start_time)
     return HttpResponseRedirect(reverse('card:index'))
 
 @login_required(login_url='/card/login')
