@@ -106,3 +106,12 @@ def new_hours_per_day(request):
     m.save()
 
     return HttpResponseRedirect(reverse('card:settings'))
+
+@login_required(login_url='/card/login')
+def edit_minutes(request, minutes_id):
+    minutes = get_object_or_404(Minutes, pk=minutes_id)
+    return render(request, 'card/user/edit_minutes.html', {"minutes": minutes})
+
+@login_required(login_url='/card/login')
+def update_minutes(request, minutes_id):
+    return HttpResponseRedirect(reverse('card:settings'))

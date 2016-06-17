@@ -1,4 +1,5 @@
-timecard/settings.py
-timecard/settings.pyc
+settings.py
 .DS_store
 *.pyc
+*.sqlite3
+deploy.sh

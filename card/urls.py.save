@@ -38,8 +38,8 @@ urlpatterns = [
     url(r'^settings/new/$', views.user.new_hours_per_day, name='new_hours_per_day'),
     url(r'^(?P<minutes_id>[0-9]+)/settings/minutes/edit/$', views.user.edit_minutes, name='edit_minutes'),
     url(r'^(?P<minutes_id>[0-9]+)/settings/minutes/update/$', views.user.update_minutes, name='update_minutes'),
-]
+]from django.conf import settings
+from django.conf.urls.static impo
 
-#  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # urlpatterns += staticfiles_urlpatterns()
 
