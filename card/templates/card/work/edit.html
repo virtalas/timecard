@@ -13,34 +13,43 @@
   <form action="{% url 'card:update_work' work_id %}" method="post">
     {% csrf_token %}
     <div class="row">
-      <div class="col-xs-3">
-        <label>Project</label>
+      <div class="col-lg-3 form-col">
+        <div class="row">
+          <label>Project</label>
+        </div>
+        <div class="row">
+          <select class="form-control" name="project_id">
+            {% for project in projects %}
+              <option value="{{project.id}}"
+                {% ifequal project_id project.id %} selected {% endifequal %}
+              >{{project.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
-      <div class="col-xs-3">
-        <label>Start time</label>
+      <div class="col-lg-3 form-col">
+        <div class="row">
+          <label>Start date</label>
+        </div>
+        <div class="row">
+          <input type="text" name="start_time" class="form-control" value='{% if not error %}{{start_time|date:"Y-m-d H:i"}}{% else %}{{start_time}}{% endif %}'>
+        </div>
       </div>
-      <div class="col-xs-3">
-        <label>End time</label>
+      <div class="col-lg-3 form-col">
+        <div class="row">
+          <label>End date</label>
+        </div>
+        <div class="row">
+          <input type="text" name="end_time" class="form-control" value='{% if not error %}{{end_time|date:"Y-m-d H:i"}}{% else %}{{end_time}}{% endif %}'>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-3">
-        <select class="form-control" name="project_id">
-          {% for project in projects %}
-            <option value="{{project.id}}"
-              {% ifequal project_id project.id %} selected {% endifequal %}
-            >{{project.name}}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-xs-3">
-        <input type="text" name="start_time" class="form-control" value='{% if not error %}{{start_time|date:"Y-m-d H:i"}}{% else %}{{start_time}}{% endif %}'>
-      </div>
-      <div class="col-xs-3">
-        <input type="text" name="end_time" class="form-control" value='{% if not error %}{{end_time|date:"Y-m-d H:i"}}{% else %}{{end_time}}{% endif %}'>
-      </div>
-      <div class="col-xs-1">
-        <input type="submit" class="btn btn-primary" value="Update" />
+      <div class="col-lg-1 form-col">
+        <div class="row">
+          <label>&nbsp;</label>
+        </div>
+        <div class="row">
+          <input type="submit" class="btn btn-primary" value="Update" />
+        </div>
       </div>
     </div>
   </form>

@@ -14,37 +14,47 @@
     <form action="{% url 'card:add_new_work' %}" method="post">
       {% csrf_token %}
       <div class="row">
-        <div class="col-xs-3">
-          <label>Project</label>
+        <div class="col-lg-3 form-col">
+          <div class="row">
+            <label>Project</label>
+          </div>
+          <div class="row">
+            <select class="form-control" name="project_id">
+              {% for project in projects %}
+                <option value="{{project.id}}"
+                  {% ifequal project_id project.id %} selected {% endifequal %}
+                >{{project.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
         </div>
-        <div class="col-xs-3">
-          <label>Start time</label>
+        <div class="col-lg-3 form-col">
+          <div class="row">
+            <label>Start date</label>
+          </div>
+          <div class="row">
+            <input type="text" name="start_time" class="form-control" value='{% if start_time %}{{start_time}}{% else %}{% now "Y-m-d H:i" %}{% endif %}'>
+          </div>
         </div>
-        <div class="col-xs-3">
-          <label>End time</label>
+        <div class="col-lg-3 form-col">
+          <div class="row">
+            <label>End date</label>
+          </div>
+          <div class="row">
+            <input type="text" name="end_time" class="form-control" value='{% if end_time %}{{end_time}}{% else %}{% now "Y-m-d H:i" %}{% endif %}'>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-3">
-          <select class="form-control" name="project_id">
-            {% for project in projects %}
-              <option value="{{project.id}}"
-                {% ifequal project_id project.id %} selected {% endifequal %}
-              >{{project.name}}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="col-xs-3">
-          <input type="text" name="start_time" class="form-control" value='{% if start_time %}{{start_time}}{% else %}{% now "Y-m-d H:i" %}{% endif %}'>
-        </div>
-        <div class="col-xs-3">
-          <input type="text" name="end_time" class="form-control" value='{% if end_time %}{{end_time}}{% else %}{% now "Y-m-d H:i" %}{% endif %}'>
-        </div>
-        <div class="col-xs-1">
-          <input type="submit" class="btn btn-primary" value="Add" />
+        <div class="col-lg-1 form-col">
+          <div class="row">
+            <label>&nbsp;</label>
+          </div>
+          <div class="row">
+            <input type="submit" class="btn btn-primary" value="Add" />
+          </div>
         </div>
       </div>
     </form>
+
   {% else %}
     <b>No projects.</b>
   {% endif %}

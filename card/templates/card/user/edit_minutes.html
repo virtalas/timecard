@@ -7,28 +7,37 @@
   <form action="{% url 'card:update_minutes' minutes.id %}" method="post">
     {% csrf_token %}
     <div class="row">
-      <div class="col-xs-2">
-        <label>Start date</label>
+      <div class="col-lg-2 form-col">
+        <div class="row">
+          <label>Start date</label>
+        </div>
+        <div class="row">
+          <input type="text" name="start_date" value="{{minutes.start_date|date:'Y-m-d H:i'}}" class="form-control">
+        </div>
       </div>
-      <div class="col-xs-2">
-        <label>End date</label>
+      <div class="col-lg-2 form-col">
+        <div class="row">
+          <label>End date</label>
+        </div>
+        <div class="row">
+          <input type="text" name="end_date" value="{{minutes.end_date}}" class="form-control">
+        </div>
       </div>
-      <div class="col-xs-2">
-        <label>Hours per day</label>
+      <div class="col-lg-2 form-col">
+        <div class="row">
+          <label>Hours per day</label>
+        </div>
+        <div class="row">
+          <input type="text" name="hours" value="{{minutes.hours_per_day}}" class="form-control">
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-2">
-        <input type="text" name="start_date" value="{{minutes.start_date}}" class="form-control">
-      </div>
-      <div class="col-xs-2">
-        <input type="text" name="end_date" value="{{minutes.end_date}}" class="form-control">
-      </div>
-      <div class="col-xs-2">
-        <input type="text" name="hours" value="{{minutes.hours_per_day}}" class="form-control">
-      </div>
-      <div class="col-xs-2">
-        <button class="btn btn-primary" type="submit">Update</button>
+      <div class="col-lg-2 form-col">
+        <div class="row">
+          <label>&nbsp;</label>
+        </div>
+        <div class="row">
+          <button class="btn btn-primary" type="submit">Update</button>
+        </div>
       </div>
     </div>
   </form>

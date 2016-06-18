@@ -25,3 +25,7 @@ table.report tr td, table.report tr th {
 table.report {
   width: 600px;
 }
+
+.form-col {
+  margin: 15px;
+}

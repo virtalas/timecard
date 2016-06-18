@@ -7,10 +7,12 @@
   <form action="{% url 'card:new_project' %}" method="post">
     {% csrf_token %}
     <div class="row">
-      <div class="col-xs-3">
+      <div class="col-lg-3 form-col">
         <input class="form-control" type="text" name="name" value="">
       </div>
-      <button type="submit" class="btn btn-primary">Create</button>
+      <div class="col-lg-1 form-col">
+        <button type="submit" class="btn btn-primary">Create</button>
+      </div>
     </div>
   </form>
 

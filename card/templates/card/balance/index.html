@@ -19,22 +19,29 @@
   <form action="{% url 'card:report' %}" method="post">
     {% csrf_token %}
     <div class="row">
-      <div class="col-xs-3">
-        <label>Start date</label>
+      <div class="col-lg-3 form-col">
+        <div class="row">
+          <label>Start date</label>
+        </div>
+        <div class="row">
+          <input type="text" name="start_d" class="form-control" value='{% if start_date %}{{start_date}}{% else %}{% now "Y-m-d" %}{% endif %}'>
+        </div>
       </div>
-      <div class="col-xs-3">
-        <label>End date</label>
+      <div class="col-lg-3 form-col">
+        <div class="row">
+          <label>End date</label>
+        </div>
+        <div class="row">
+          <input type="text" name="end_d" class="form-control" value='{% if end_date %}{{end_date}}{% else %}{% now "Y-m-d" %}{% endif %}'>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-3">
-        <input type="text" name="start_d" class="form-control" value='{% if start_date %}{{start_date}}{% else %}{% now "Y-m-d" %}{% endif %}'>
-      </div>
-      <div class="col-xs-3">
-        <input type="text" name="end_d" class="form-control" value='{% if end_date %}{{end_date}}{% else %}{% now "Y-m-d" %}{% endif %}'>
-      </div>
-      <div class="col-xs-1">
-        <input type="submit" class="btn btn-primary" value="Generate report" />
+      <div class="col-lg-1 form-col">
+        <div class="row">
+          <label>&nbsp;</label>
+        </div>
+        <div class="row">
+          <input type="submit" class="btn btn-default" value="Generate report" />
+        </div>
       </div>
     </div>
   </form>
