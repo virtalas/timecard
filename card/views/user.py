@@ -110,8 +110,32 @@ def new_hours_per_day(request):
 @login_required(login_url='/card/login')
 def edit_minutes(request, minutes_id):
     minutes = get_object_or_404(Minutes, pk=minutes_id)
-    return render(request, 'card/user/edit_minutes.html', {"minutes": minutes})
+    return render(request, 'card/user/edit_minutes.html', {
+        "minutes_id": minutes.id,
+        "start_date": minutes.start_date,
+        "end_date": minutes.end_date,
+        "hours_per_day": minutes.hours_per_day
+    })
 
 @login_required(login_url='/card/login')
 def update_minutes(request, minutes_id):
-    return HttpResponseRedirect(reverse('card:settings'))
+    minutes = get_object_or_404(Minutes, pk=minutes_id)
+    start_date = request.POST['start_date']
+    end_date = request.POST['end_date']
+    hours_per_day = float(request.POST['hours'])
+
+    try:
+        # start and end dates inputted correctly
+        minutes.start_date = start_date
+        minutes.end_date = end_date
+        minutes.minutes_per_day = int(hours_per_day * 60)
+        minutes.save()
+        return HttpResponseRedirect(reverse('card:settings'))
+    except:
+        return render(request, 'card/user/edit_minutes.html', {
+            "minutes_id": minutes.id,
+            "error": "Date was given incorrectly.",
+            "start_date": start_date,
+            "end_date": end_date,
+            "hours_per_day": hours_per_day
+        })

@@ -4,7 +4,13 @@
 
   <h3>Edit</h3>
 
-  <form action="{% url 'card:update_minutes' minutes.id %}" method="post">
+  {% if error %}
+    <div class="alert alert-danger">
+      {{error}}
+    </div>
+  {% endif %}
+
+  <form action="{% url 'card:update_minutes' minutes_id %}" method="post">
     {% csrf_token %}
     <div class="row">
       <div class="col-lg-2 form-col">
@@ -12,7 +18,7 @@
           <label>Start date</label>
         </div>
         <div class="row">
-          <input type="text" name="start_date" value="{{minutes.start_date|date:'Y-m-d H:i'}}" class="form-control">
+          <input type="text" name="start_date" value="{% if not error %}{{start_date|date:'Y-m-d H:i'}}{% else %}{{start_date}}{% endif %}" class="form-control">
         </div>
       </div>
       <div class="col-lg-2 form-col">
@@ -20,7 +26,7 @@
           <label>End date</label>
         </div>
         <div class="row">
-          <input type="text" name="end_date" value="{{minutes.end_date}}" class="form-control">
+          <input type="text" name="end_date" value="{% if not error %}{{end_date|date:'Y-m-d H:i'}}{% else %}{{end_date}}{% endif %}" class="form-control">
         </div>
       </div>
       <div class="col-lg-2 form-col">
@@ -28,7 +34,7 @@
           <label>Hours per day</label>
         </div>
         <div class="row">
-          <input type="text" name="hours" value="{{minutes.hours_per_day}}" class="form-control">
+          <input type="text" name="hours" value="{{hours_per_day}}" class="form-control">
         </div>
       </div>
       <div class="col-lg-2 form-col">

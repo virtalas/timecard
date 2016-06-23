@@ -62,12 +62,12 @@
     <tbody>
       {% for minute in minutes %}
         <tr>
-          <td>{{minute.start_date}}</td>
+          <td>{{minute.start_date|date:"H:i, d.m.Y"}}</td>
           <td>
             {% if minute.end_date == None %}
               Currently active
             {% else %}
-              {{minute.end_date}}
+              {{minute.end_date|date:"H:i, d.m.Y"}}
             {% endif %}
           </td>
           <td>{{minute.hours_per_day}}</td>
