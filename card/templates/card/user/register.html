@@ -1,7 +1,7 @@
 {% extends 'card/base.html' %}
 
 {% block content %}
-  <h1>Rekisteröidy palveluun</h1>
+  <h1>Register</h1>
 
     {% if errors %}
       <div class="alert alert-danger">
@@ -22,25 +22,25 @@
     <form method="post" action="{% url 'card:register' %}">
       {% csrf_token %}
       <div class="form-group">
-        <label>Nimi</label>
+        <label>Name</label>
         <input type="text" class="form-control" name="firstname" value="{{firstname}}">
       </div>
 
       <div class="form-group">
-        <label>Sähköposti</label>
+        <label>Email</label>
         <input type="text" class="form-control" name="email" value="{{email}}">
       </div>
 
       <div class="form-group">
-        <label>Salasana</label>
+        <label>Password</label>
         <input type="password" class="form-control" name="password">
       </div>
 
       <div class="form-group">
-        <label>Salasana uudelleen</label>
+        <label>Retype password</label>
         <input type="password" class="form-control" name="password2">
       </div>
 
-      <button type="submit" class="btn btn-primary">Rekisteröidy</button>
+      <button type="submit" class="btn btn-primary">Register</button>
     </form>
 {% endblock %}

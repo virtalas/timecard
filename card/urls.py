@@ -25,6 +25,7 @@ urlpatterns = [
 
     url(r'^balance/$', views.balance.index, name='balance'),
     url(r'^balance/report/$', views.balance.report, name='report'),
+    url(r'^balance/email+$', views.balance.email_report, name='email_report'),
 
     url(r'^history/$', views.history.index, name='history'),
 
@@ -39,7 +40,3 @@ urlpatterns = [
     url(r'^(?P<minutes_id>[0-9]+)/settings/minutes/edit/$', views.user.edit_minutes, name='edit_minutes'),
     url(r'^(?P<minutes_id>[0-9]+)/settings/minutes/update/$', views.user.update_minutes, name='update_minutes'),
 ]
-
-#  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-# urlpatterns += staticfiles_urlpatterns()
-

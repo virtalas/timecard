@@ -1,7 +1,7 @@
 {% extends 'card/base.html' %}
 
 {% block content %}
-  <h1>Kirjaudu sisään</h1>
+  <h1>Log in</h1>
 
     {% if error %}
       <div class="alert alert-danger">
@@ -20,15 +20,15 @@
     <form method="post" action="{% url 'card:login' %}">
       {% csrf_token %}
       <div class="form-group">
-        <label>Sähköposti</label>
+        <label>Email</label>
         <input type="text" class="form-control" name="email" value="{{email}}">
       </div>
 
       <div class="form-group">
-        <label>Salasana</label>
+        <label>Password</label>
         <input type="password" class="form-control" name="password">
       </div>
 
-      <button type="submit" class="btn btn-primary">Kirjaudu sisään</button>
+      <button type="submit" class="btn btn-primary">Log in</button>
     </form>
 {% endblock %}

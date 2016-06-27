@@ -10,6 +10,8 @@ import datetime
 
 from django.contrib.auth.decorators import login_required
 
+from django.core.mail import send_mail
+
 
 @login_required(login_url='/card/login')
 def index(request):
@@ -23,6 +25,25 @@ def index(request):
     }
 
     return render(request, 'card/balance/index.html', context)
+
+@login_required(login_url='/card/login')
+def email_report(request):
+    start_date = request.GET.get('start_date', '')
+    end_date = request.GET.get('end_date', '')
+
+    # Set required POST params for report()
+    mutable = request.POST._mutable
+    request.POST._mutable = True
+    request.POST['start_d'] = start_date
+    request.POST['end_d'] = end_date
+    request.POST._mutable = mutable
+
+    html_page = report(request)
+
+    # send_email() - not yet implemented
+
+    # No redirect - email will be sent again by reloading page
+    return html_page
 
 @login_required(login_url='/card/login')
 def report(request):
@@ -89,7 +110,7 @@ def report(request):
         'hours_per_day': hours_per_day,
         'project_time': project_time
     }
-    print Minutes.objects.hours_per_day(user_id, "2016-04-13")
+
     return render(request, 'card/balance/index.html', context)
 
 def minutes_of_work_per_day(all_work):
