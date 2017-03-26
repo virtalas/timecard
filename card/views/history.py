@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def index(request):
     user_id = request.user.id
     work_all = Work.objects.order_by('-start_time').filter(user_id=user_id)

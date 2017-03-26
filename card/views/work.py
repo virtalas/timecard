@@ -11,7 +11,7 @@ from ..models import Project, Work, Minutes
 from django.contrib.auth.decorators import login_required
 
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def start_new_work(request, project_id):
     # Get start time from GET-parameters
     start_hour = int(request.GET.get("start_hour"))
@@ -26,20 +26,20 @@ def start_new_work(request, project_id):
         project.work_set.create(user_id=user_id, start_time=start_time)
     return HttpResponseRedirect(reverse('card:index'))
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def done(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
     work.end_time = timezone.now()
     work.save()
     return HttpResponseRedirect(reverse('card:index'))
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def add(request):
     user_id = request.user.id
     active_projects = Project.objects.order_by('name').filter(end_date__isnull=True, user_id=user_id)
     return render(request, 'card/work/add.html', {"projects": active_projects})
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def add_new_work(request):
     user_id = request.user.id
     project_id = request.POST['project_id']
@@ -63,7 +63,7 @@ def add_new_work(request):
 
         return render(request, 'card/work/add.html', context)
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def edit(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
     user_id = request.user.id
@@ -79,7 +79,7 @@ def edit(request, work_id):
 
     return render(request, 'card/work/edit.html', context)
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def update(request, work_id):
     user_id = request.user.id
     work = get_object_or_404(Work, pk=work_id)
@@ -107,7 +107,7 @@ def update(request, work_id):
 
         return render(request, 'card/work/edit.html', context)
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def delete(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
     work.delete()

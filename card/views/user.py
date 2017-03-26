@@ -63,7 +63,7 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('card:index'))
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def settings(request):
     user_id = request.user.id
     # minutes_per_day = Minutes.objects.minutes_per_day(user_id)
@@ -82,7 +82,7 @@ def settings(request):
 
     return render(request, 'card/user/settings.html', context)
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def new_hours_per_day(request):
     user_id = request.user.id
 
@@ -107,7 +107,7 @@ def new_hours_per_day(request):
 
     return HttpResponseRedirect(reverse('card:settings'))
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def edit_minutes(request, minutes_id):
     minutes = get_object_or_404(Minutes, pk=minutes_id)
     return render(request, 'card/user/edit_minutes.html', {
@@ -117,7 +117,7 @@ def edit_minutes(request, minutes_id):
         "hours_per_day": minutes.hours_per_day
     })
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def update_minutes(request, minutes_id):
     minutes = get_object_or_404(Minutes, pk=minutes_id)
     start_date = request.POST['start_date']

@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def index(request):
     user_id = request.user.id
     all_work = Work.objects.filter(end_time__isnull=False, user_id=user_id)
@@ -26,7 +26,7 @@ def index(request):
 
     return render(request, 'card/balance/index.html', context)
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def email_report(request):
     start_date = request.GET.get('start_date', '')
     end_date = request.GET.get('end_date', '')
@@ -45,7 +45,7 @@ def email_report(request):
     # No redirect - email will be sent again by reloading page
     return html_page
 
-@login_required(login_url='/card/login')
+@login_required(login_url='/timecard/login')
 def report(request):
     user_id = request.user.id
     all_work = Work.objects.filter(end_time__isnull=False, user_id=user_id).order_by('start_time')
