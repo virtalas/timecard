@@ -19,12 +19,12 @@ $(document).ready(function(){
 })
 
 function update_timer() {
-  seconds_left--;
-
   if (seconds_left == 0) {
     negative = true;
     use_negative_sign = true;
   }
+
+  seconds_left--;
 
   var seconds_left_abs = Math.abs(seconds_left);
 

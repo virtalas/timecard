@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from django.utils import timezone
 from ..models import Project, Work, Minutes
 
@@ -31,6 +31,34 @@ def done(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
     work.end_time = timezone.now()
     work.save()
+    return HttpResponseRedirect(reverse('card:index'))
+
+@login_required(login_url='/timecard/login')
+def done_for_today(request, work_id):
+    user_id = request.user.id
+    work = get_object_or_404(Work, pk=work_id)
+    today = date.today()
+    todays_work = Work.objects.filter(end_time__isnull=False, start_time__year=today.year, start_time__month=today.month, start_time__day=today.day, user_id=user_id)
+    minutes_per_day = Minutes.objects.current_minutes_per_day(user_id)
+    seconds_of_work = 0
+
+    for w in todays_work:
+        seconds_of_work += w.seconds_of_work()
+
+    minutes_of_work = int(seconds_of_work / 60)
+    minutes_left_for_today = minutes_per_day - minutes_of_work
+
+    # Is today's balance positive or negative
+    if minutes_left_for_today < 0:
+        # Negative, don't do anything
+        return HttpResponseRedirect(reverse('card:index'))
+
+    # Set the stop time for the current work so that balance for today becomes 0
+    end_time = work.start_time + timedelta(minutes=minutes_left_for_today)
+
+    work.end_time = end_time
+    work.save()
+
     return HttpResponseRedirect(reverse('card:index'))
 
 @login_required(login_url='/timecard/login')

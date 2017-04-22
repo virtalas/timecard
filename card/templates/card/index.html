@@ -37,6 +37,17 @@
         {% csrf_token %}
         <input type="submit" class="btn btn-default" value="Stop timer" />
       </form>
+
+      <br><br>
+
+      {% if not negative and hours_left != 0 and minutes_left != 0 %}
+        <p>Stop the timer with an end time that makes balance 0 for today:</p>
+
+        <form action="{% url 'card:work_done_for_today' current_work.id %}" method="post">
+          {% csrf_token %}
+          <input type="submit" class="btn btn-default btn-xs" value="Stop for today" />
+        </form>
+      {% endif %}
     {% else %}
       <!-- No current work, display interface for starting a timer/work -->
 
