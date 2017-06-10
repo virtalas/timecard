@@ -28,7 +28,11 @@
       <h3>Current timer</h3>
 
       <b>Start time</b><br>
-      {{current_work.start_time|date:"H:i j.m.Y"}}<br><br>
+      <span>{{current_work.start_time|date:"H:i j.m.Y"}}</span><br><br>
+      <span id="start_time" style="display:none;">{{current_work.start_time|date:"c"}}</span>
+
+      <b>Length</b><br>
+      <span id="length">{{current_work.start_time|timesince}}, 0 seconds</span><br><br>
 
       <b>Project</b><br>
       {{current_work.project.name}}<br><br>
@@ -40,7 +44,7 @@
 
       <br><br>
 
-      {% if not negative and hours_left != 0 and minutes_left != 0 %}
+      {% if not negative and hours_left >= 0 and minutes_left > 0 %}
         <p>Stop the timer with an end time that makes balance 0 for today:</p>
 
         <form action="{% url 'card:work_done_for_today' current_work.id %}" method="post">
